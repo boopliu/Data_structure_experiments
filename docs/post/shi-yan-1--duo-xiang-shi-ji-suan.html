@@ -21,7 +21,7 @@
 <meta property="og:url" content="https://boopliu.github.io/Data_structure_experiments/post/shi-yan-1--duo-xiang-shi-ji-suan.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
 <title>实验1-多项式计算</title>
-<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
 
 
 </head>
@@ -45,17 +45,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     body {padding: 8px;}
     .postTitle{font-size:24px;}
 }
-.copy-feedback {
-    display: none;
-    position: absolute;
-    top: 10px;
-    right: 50px;
-    color: var(--color-fg-on-emphasis);
-    background-color: var(--color-fg-muted);
-    border-radius: 3px;
-    padding: 5px 8px;
-    font-size: 12px;
-}
+
 </style>
 
 
@@ -90,190 +80,191 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <div class="markdown-body" id="postBody"><h1>多项式链表相加</h1>
 <p>该程序通过链表形式表示多项式，并实现了两个有序多项式链表的相加。每个节点表示多项式中的一项，包括系数和指数。</p>
 <h2>代码</h2>
-<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-k">#include</span> <span class="pl-s">&lt;stdio.h&gt;</span>
-<span class="pl-k">#include</span> <span class="pl-s">&lt;stdlib.h&gt;</span>
-<span class="pl-c">//#include &lt;stdbool.h&gt;</span>
+<pre lang="c" class="notranslate"><code class="notranslate">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+//#include &lt;stdbool.h&gt;
 
-<span class="pl-c">/* 节点结构体，表示多项式的一项 */</span>
-<span class="pl-k">struct</span> <span class="pl-smi">Node</span>{
-    <span class="pl-smi">int</span> <span class="pl-c1">val</span>;           <span class="pl-c">// 系数</span>
-    <span class="pl-smi">int</span> <span class="pl-c1">exp</span>;           <span class="pl-c">// 指数</span>
-    <span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-c1">next</span>; <span class="pl-c">// 指向下一项</span>
+/* 节点结构体，表示多项式的一项 */
+struct Node{
+    int val;           // 系数
+    int exp;           // 指数
+    struct Node* next; // 指向下一项
 };
 
-<span class="pl-c">/*</span>
-<span class="pl-c"> * 函数名：creatlist</span>
-<span class="pl-c"> * 功能：创建一个按指数升序排列的多项式链表</span>
-<span class="pl-c"> * 参数：</span>
-<span class="pl-c"> *     head - 链表头指针（初始为 NULL）</span>
-<span class="pl-c"> *     n    - 需要输入的项数</span>
-<span class="pl-c"> * 返回值：</span>
-<span class="pl-c"> *     创建好的链表头指针</span>
-<span class="pl-c"> */</span>
-<span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-en">creatlist</span>(<span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">head</span>, <span class="pl-smi">int</span> <span class="pl-s1">n</span>){
-    <span class="pl-k">for</span>(<span class="pl-smi">int</span> <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span>; <span class="pl-s1">i</span> &lt;= <span class="pl-s1">n</span>; <span class="pl-s1">i</span><span class="pl-c1">++</span>){
-    	<span class="pl-c">// 分配新节点</span>
-        <span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">tmp</span> <span class="pl-c1">=</span> (<span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span>)<span class="pl-en">malloc</span>(<span class="pl-k">sizeof</span>(<span class="pl-k">struct</span> <span class="pl-smi">Node</span>)); 
-        <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-c1">NULL</span>;
-        <span class="pl-en">printf</span>(<span class="pl-s">"请输入第%d项的系数和指数： "</span>,<span class="pl-s1">i</span>);
-        <span class="pl-en">scanf</span>(<span class="pl-s">"%d %d"</span>, <span class="pl-c1">&amp;</span><span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span>, <span class="pl-c1">&amp;</span><span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span>);
+/*
+ * 函数名：creatlist
+ * 功能：创建一个按指数升序排列的多项式链表
+ * 参数：
+ *     head - 链表头指针（初始为 NULL）
+ *     n    - 需要输入的项数
+ * 返回值：
+ *     创建好的链表头指针
+ */
+struct Node* creatlist(Node* head, int n){
+    for(int i = 1; i &lt;= n; i++){
+    	// 分配新节点
+        struct Node* tmp = (struct Node*)malloc(sizeof(struct Node)); 
+        tmp-&gt;next = NULL;
+        printf("请输入第%d项的系数和指数： ",i);
+        scanf("%d %d", &amp;tmp-&gt;val, &amp;tmp-&gt;exp);
         
-        <span class="pl-k">if</span>(<span class="pl-s1">head</span> <span class="pl-c1">==</span> <span class="pl-c1">NULL</span>){
-            <span class="pl-c">// 第一个节点直接作为头节点</span>
-            <span class="pl-s1">head</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-        } <span class="pl-k">else</span> {
-            <span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">cur</span> <span class="pl-c1">=</span> <span class="pl-s1">head</span>;
-            <span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">pre</span> <span class="pl-c1">=</span> <span class="pl-s1">head</span>;
-            <span class="pl-smi">bool</span> <span class="pl-s1">find</span> <span class="pl-c1">=</span> false; <span class="pl-c">// 用于标记是否插入完成</span>
-            <span class="pl-c">// 找到插入位置，保持指数升序</span>
-            <span class="pl-k">while</span>(<span class="pl-s1">cur</span>){
-                <span class="pl-k">if</span>(<span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span>){
-                    <span class="pl-k">if</span>(<span class="pl-s1">cur</span> <span class="pl-c1">==</span> <span class="pl-s1">head</span>){
-                        <span class="pl-c">// 插到头部</span>
-                        <span class="pl-s1">head</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-                        <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-s1">cur</span>;
-                    } <span class="pl-k">else</span> {
-                        <span class="pl-c">// 插到中间</span>
-                        <span class="pl-s1">pre</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-                        <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-s1">cur</span>;
+        if(head == NULL){
+            // 第一个节点直接作为头节点
+            head = tmp;
+        } else {
+            struct Node* cur = head;
+            struct Node* pre = head;
+            bool find = false; // 用于标记是否插入完成
+            // 找到插入位置，保持指数升序
+            while(cur){
+                if(cur-&gt;exp &gt; tmp-&gt;exp){
+                    if(cur == head){
+                        // 插到头部
+                        head = tmp;
+                        tmp-&gt;next = cur;
+                    } else {
+                        // 插到中间
+                        pre-&gt;next = tmp;
+                        tmp-&gt;next = cur;
                     }
-                    <span class="pl-s1">find</span> <span class="pl-c1">=</span> true;
-                    <span class="pl-k">break</span>;
+                    find = true;
+                    break;
                 }
-                <span class="pl-s1">pre</span> <span class="pl-c1">=</span> <span class="pl-s1">cur</span>;
-                <span class="pl-s1">cur</span> <span class="pl-c1">=</span> <span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span>;
+                pre = cur;
+                cur = cur-&gt;next;
             }
-            <span class="pl-k">if</span>(!<span class="pl-s1">find</span>){
-                <span class="pl-c">// 没有找到比它大的指数，插到末尾</span>
-                <span class="pl-s1">pre</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
+            if(!find){
+                // 没有找到比它大的指数，插到末尾
+                pre-&gt;next = tmp;
             }
         }
     }
-    <span class="pl-k">return</span> <span class="pl-s1">head</span>;
+    return head;
 }
 
-<span class="pl-c">/*</span>
-<span class="pl-c"> * 函数名：addtwolist</span>
-<span class="pl-c"> * 功能：将两个有序多项式链表相加，生成一个新的有序多项式链表</span>
-<span class="pl-c"> * 参数：</span>
-<span class="pl-c"> *     head1 - 第一个多项式链表头</span>
-<span class="pl-c"> *     head2 - 第二个多项式链表头</span>
-<span class="pl-c"> * 返回值：</span>
-<span class="pl-c"> *     结果多项式链表头指针</span>
-<span class="pl-c"> */</span>
-<span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-en">addtwolist</span>(<span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">head1</span>, <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">head2</span>){
-    <span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">h3</span> <span class="pl-c1">=</span> <span class="pl-c1">NULL</span>;  <span class="pl-c">// 结果链表头</span>
-    <span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">cur</span> <span class="pl-c1">=</span> <span class="pl-s1">h3</span>;   <span class="pl-c">// 指向结果链表末尾</span>
+/*
+ * 函数名：addtwolist
+ * 功能：将两个有序多项式链表相加，生成一个新的有序多项式链表
+ * 参数：
+ *     head1 - 第一个多项式链表头
+ *     head2 - 第二个多项式链表头
+ * 返回值：
+ *     结果多项式链表头指针
+ */
+struct Node* addtwolist(Node* head1, Node* head2){
+    struct Node* h3 = NULL;  // 结果链表头
+    struct Node* cur = h3;   // 指向结果链表末尾
     
-    <span class="pl-k">while</span>(<span class="pl-s1">head1</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">head2</span>){
-        <span class="pl-k">struct</span> <span class="pl-smi">Node</span> <span class="pl-c1">*</span> <span class="pl-s1">tmp</span> <span class="pl-c1">=</span> (<span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span>)<span class="pl-en">malloc</span>(<span class="pl-k">sizeof</span>(<span class="pl-k">struct</span> <span class="pl-smi">Node</span>)); <span class="pl-c">// 分配新节点</span>
-        <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-c1">NULL</span>;
+    while(head1 &amp;&amp; head2){
+        struct Node * tmp = (struct Node*)malloc(sizeof(struct Node)); // 分配新节点
+        tmp-&gt;next = NULL;
         
-        <span class="pl-k">if</span>(<span class="pl-s1">head1</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span> <span class="pl-c1">==</span> <span class="pl-s1">head2</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span>){
-            <span class="pl-c">// 指数相同，系数相加</span>
-            <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span> <span class="pl-c1">=</span> <span class="pl-s1">head1</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span> <span class="pl-c1">+</span> <span class="pl-s1">head2</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span>;
-            <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span> <span class="pl-c1">=</span> <span class="pl-s1">head1</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span>;
+        if(head1-&gt;exp == head2-&gt;exp){
+            // 指数相同，系数相加
+            tmp-&gt;val = head1-&gt;val + head2-&gt;val;
+            tmp-&gt;exp = head1-&gt;exp;
             
-            <span class="pl-k">if</span>(<span class="pl-s1">h3</span> <span class="pl-c1">==</span> <span class="pl-c1">NULL</span>){
-                <span class="pl-s1">h3</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-                <span class="pl-s1">cur</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-            } <span class="pl-k">else</span> {
-                <span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-                <span class="pl-s1">cur</span> <span class="pl-c1">=</span> <span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span>;
+            if(h3 == NULL){
+                h3 = tmp;
+                cur = tmp;
+            } else {
+                cur-&gt;next = tmp;
+                cur = cur-&gt;next;
             }
             
-            <span class="pl-s1">head1</span> <span class="pl-c1">=</span> <span class="pl-s1">head1</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span>;
-            <span class="pl-s1">head2</span> <span class="pl-c1">=</span> <span class="pl-s1">head2</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span>; 
+            head1 = head1-&gt;next;
+            head2 = head2-&gt;next; 
         } 
-        <span class="pl-k">else</span> <span class="pl-k">if</span>(<span class="pl-s1">head1</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">head2</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span>){
-            <span class="pl-c">// head1 指数小，直接拷贝</span>
-            <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span> <span class="pl-c1">=</span> <span class="pl-s1">head1</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span>;
-            <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span> <span class="pl-c1">=</span> <span class="pl-s1">head1</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span>;
+        else if(head1-&gt;exp &lt; head2-&gt;exp){
+            // head1 指数小，直接拷贝
+            tmp-&gt;val = head1-&gt;val;
+            tmp-&gt;exp = head1-&gt;exp;
             
-            <span class="pl-k">if</span>(<span class="pl-s1">h3</span> <span class="pl-c1">==</span> <span class="pl-c1">NULL</span>){
-                <span class="pl-s1">h3</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-                <span class="pl-s1">cur</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-            } <span class="pl-k">else</span> {
-                <span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-                <span class="pl-s1">cur</span> <span class="pl-c1">=</span> <span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span>;
+            if(h3 == NULL){
+                h3 = tmp;
+                cur = tmp;
+            } else {
+                cur-&gt;next = tmp;
+                cur = cur-&gt;next;
             }
             
-            <span class="pl-s1">head1</span> <span class="pl-c1">=</span> <span class="pl-s1">head1</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span>;
+            head1 = head1-&gt;next;
         } 
-        <span class="pl-k">else</span> {
-            <span class="pl-c">// head2 指数小，直接拷贝</span>
-            <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span> <span class="pl-c1">=</span> <span class="pl-s1">head2</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span>;
-            <span class="pl-s1">tmp</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span> <span class="pl-c1">=</span> <span class="pl-s1">head2</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span>;
+        else {
+            // head2 指数小，直接拷贝
+            tmp-&gt;val = head2-&gt;val;
+            tmp-&gt;exp = head2-&gt;exp;
             
-            <span class="pl-k">if</span>(<span class="pl-s1">h3</span> <span class="pl-c1">==</span> <span class="pl-c1">NULL</span>){
-                <span class="pl-s1">h3</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-                <span class="pl-s1">cur</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-            } <span class="pl-k">else</span> {
-                <span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-s1">tmp</span>;
-                <span class="pl-s1">cur</span> <span class="pl-c1">=</span> <span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span>;
+            if(h3 == NULL){
+                h3 = tmp;
+                cur = tmp;
+            } else {
+                cur-&gt;next = tmp;
+                cur = cur-&gt;next;
             }
             
-            <span class="pl-s1">head2</span> <span class="pl-c1">=</span> <span class="pl-s1">head2</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span>;
+            head2 = head2-&gt;next;
         }
     }
-    <span class="pl-k">if</span>(<span class="pl-s1">cur</span> <span class="pl-c1">==</span> <span class="pl-c1">NULL</span>){
-        <span class="pl-k">return</span> <span class="pl-c1">NULL</span>; <span class="pl-c">// 两个链表都为空</span>
+    if(cur == NULL){
+        return NULL; // 两个链表都为空
     }
-    <span class="pl-c">// 拼接剩余节点</span>
-    <span class="pl-k">if</span>(<span class="pl-s1">head1</span>) {
-        <span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-s1">head1</span>;
+    // 拼接剩余节点
+    if(head1) {
+        cur-&gt;next = head1;
     }
-    <span class="pl-k">if</span>(<span class="pl-s1">head2</span>){
-        <span class="pl-s1">cur</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">=</span> <span class="pl-s1">head2</span>;
+    if(head2){
+        cur-&gt;next = head2;
     }
-    <span class="pl-k">return</span> <span class="pl-s1">h3</span>;
+    return h3;
 }
 
-<span class="pl-c">/*</span>
-<span class="pl-c"> * 函数名：printlist</span>
-<span class="pl-c"> * 功能：输出多项式链表</span>
-<span class="pl-c"> * 参数：</span>
-<span class="pl-c"> *     head - 链表头</span>
-<span class="pl-c"> * 返回值：无</span>
-<span class="pl-c"> */</span>
-<span class="pl-smi">void</span> <span class="pl-en">printlist</span>(<span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">head</span>){
-    <span class="pl-k">while</span>(<span class="pl-s1">head</span>){
-        <span class="pl-k">if</span>(<span class="pl-s1">head</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span> <span class="pl-c1">==</span> <span class="pl-c1">NULL</span>){
-            <span class="pl-en">printf</span>(<span class="pl-s">"%dx^%d\n"</span>, <span class="pl-s1">head</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span>, <span class="pl-s1">head</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span>);
-            <span class="pl-k">break</span>;
+/*
+ * 函数名：printlist
+ * 功能：输出多项式链表
+ * 参数：
+ *     head - 链表头
+ * 返回值：无
+ */
+void printlist(struct Node* head){
+    while(head){
+        if(head-&gt;next == NULL){
+            printf("%dx^%d\n", head-&gt;val, head-&gt;exp);
+            break;
         }
-        <span class="pl-en">printf</span>(<span class="pl-s">"%dx^%d+"</span>, <span class="pl-s1">head</span><span class="pl-c1">-&gt;</span><span class="pl-c1">val</span>, <span class="pl-s1">head</span><span class="pl-c1">-&gt;</span><span class="pl-c1">exp</span>);
-        <span class="pl-s1">head</span> <span class="pl-c1">=</span> <span class="pl-s1">head</span><span class="pl-c1">-&gt;</span><span class="pl-c1">next</span>;
+        printf("%dx^%d+", head-&gt;val, head-&gt;exp);
+        head = head-&gt;next;
     }
 }
 
-<span class="pl-smi">int</span> <span class="pl-en">main</span>()
+int main()
 {
-    <span class="pl-smi">int</span> <span class="pl-s1">n1</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>, <span class="pl-s1">n2</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
-    <span class="pl-en">printf</span>(<span class="pl-s">"请输入第一个多项式的项数：\n"</span>); 
-    <span class="pl-en">scanf</span>(<span class="pl-s">"%d"</span>, <span class="pl-c1">&amp;</span><span class="pl-s1">n1</span>);
-    <span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">h1</span> <span class="pl-c1">=</span> <span class="pl-c1">NULL</span>;
-    <span class="pl-s1">h1</span> <span class="pl-c1">=</span> <span class="pl-en">creatlist</span>(<span class="pl-s1">h1</span>, <span class="pl-s1">n1</span>);
-    <span class="pl-en">printf</span>(<span class="pl-s">"请输入第二个多项式的项数：\n"</span>); 
-    <span class="pl-en">scanf</span>(<span class="pl-s">"%d"</span>, <span class="pl-c1">&amp;</span><span class="pl-s1">n2</span>);
-    <span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">h2</span> <span class="pl-c1">=</span> <span class="pl-c1">NULL</span>;
-    <span class="pl-s1">h2</span> <span class="pl-c1">=</span> <span class="pl-en">creatlist</span>(<span class="pl-s1">h2</span>, <span class="pl-s1">n2</span>);
-    <span class="pl-k">struct</span> <span class="pl-smi">Node</span><span class="pl-c1">*</span> <span class="pl-s1">h3</span> <span class="pl-c1">=</span> <span class="pl-c1">NULL</span>;
-    <span class="pl-s1">h3</span> <span class="pl-c1">=</span> <span class="pl-en">addtwolist</span>(<span class="pl-s1">h1</span>, <span class="pl-s1">h2</span>);
-    <span class="pl-en">printlist</span>(<span class="pl-s1">h3</span>);
-    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+    int n1 = 0, n2 = 0;
+    printf("请输入第一个多项式的项数：\n"); 
+    scanf("%d", &amp;n1);
+    struct Node* h1 = NULL;
+    h1 = creatlist(h1, n1);
+    printf("请输入第二个多项式的项数：\n"); 
+    scanf("%d", &amp;n2);
+    struct Node* h2 = NULL;
+    h2 = creatlist(h2, n2);
+    struct Node* h3 = NULL;
+    h3 = addtwolist(h1, h2);
+    printlist(h3);
+    return 0;
 }
 
-<span class="pl-c">/*</span>
-<span class="pl-c">测试数据:</span>
-<span class="pl-c">3</span>
-<span class="pl-c">2 1</span>
-<span class="pl-c">5 3</span>
-<span class="pl-c">2 4</span>
-<span class="pl-c">2</span>
-<span class="pl-c">2 5</span>
-<span class="pl-c">3 4</span>
-<span class="pl-c">*/</span></pre></div>
+/*
+测试数据:
+3
+2 1
+5 3
+2 4
+2
+2 5
+3 4
+*/
+</code></pre>
 <h2>输出结果</h2>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/bbb6c4c3-a2a3-4348-8ce9-cc84703ac25d"><img width="784" height="415" alt="Image" src="https://github.com/user-attachments/assets/bbb6c4c3-a2a3-4348-8ce9-cc84703ac25d" style="max-width: 100%; height: auto; max-height: 415px;"></a></p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
@@ -300,7 +291,7 @@ if(""!=""){
 </script></div>
 </body>
 <script>
-var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
 var utterancesLoad=0;
 
 let themeSettings={
@@ -373,70 +364,7 @@ function iFrameLoading(){
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const createClipboardHTML = (codeContent, additionalClasses = '') => `
-        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
-        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
-            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
-                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
-                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
-            </clipboard-copy>
-            <div class="copy-feedback">Copied!</div>
-        </div>
-    `;
 
-    const handleCodeElements = (selector = '') => {
-        document.querySelectorAll(selector).forEach(codeElement => {
-            const codeContent = codeElement.innerHTML;
-            const newStructure = document.createElement('div');
-            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
-            newStructure.innerHTML = createClipboardHTML(codeContent);
-
-            const parentElement = codeElement.parentElement;
-            if (selector.includes('highlight')) {
-                parentElement.insertBefore(newStructure, codeElement.nextSibling);
-                parentElement.removeChild(codeElement);
-            } else {
-                parentElement.parentElement.replaceChild(newStructure, parentElement);
-            }
-        });
-    };
-
-    handleCodeElements('pre.notranslate > code.notranslate');
-    handleCodeElements('div.highlight > pre.notranslate');
-
-    let currentFeedback = null;
-    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
-        copyButton.addEventListener('click', () => {
-            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
-            const tempTextArea = document.createElement('textarea');
-            tempTextArea.value = codeContent;
-            document.body.appendChild(tempTextArea);
-            tempTextArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextArea);
-
-            const copyIcon = copyButton.querySelector('.octicon-copy');
-            const checkIcon = copyButton.querySelector('.octicon-check');
-            const copyFeedback = copyButton.nextElementSibling;
-
-            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
-            currentFeedback = copyFeedback;
-
-            copyIcon.classList.add('d-none');
-            checkIcon.classList.remove('d-none');
-            copyFeedback.style.display = 'block';
-            copyButton.style.borderColor = 'var(--color-success-fg)';
-
-            setTimeout(() => {
-                copyIcon.classList.remove('d-none');
-                checkIcon.classList.add('d-none');
-                copyFeedback.style.display = 'none';
-                copyButton.style.borderColor = '';
-            }, 2000);
-        });
-    });
-});
 
 </script>
 
